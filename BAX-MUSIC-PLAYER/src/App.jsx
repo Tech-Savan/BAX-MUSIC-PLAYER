@@ -1,9 +1,15 @@
 import React from "react";
-
-export const App = () => {
+import { RouterProvider } from "react-router";
+import { myMap } from "./Router/Map";
+import Authcontext from "./Context/Authcontext";
+const App = () => {
   return (
     <>
-      <h1 class="text-3xl font-bold underline">Hello world!</h1>
+    <Authcontext>
+      <RouterProvider router={myMap} />
+      
+      </Authcontext>
     </>
   );
 };
+export default App;
