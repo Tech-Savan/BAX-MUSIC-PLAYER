@@ -7,7 +7,6 @@ const App = () => {
     <>
     <Authcontext>
       <RouterProvider router={myMap} />
-      
       </Authcontext>
     </>
   );

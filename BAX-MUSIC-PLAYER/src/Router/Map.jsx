@@ -7,43 +7,52 @@ import MainPage from "../Main/MainPage";
 import ProfileContainer from "../Profile/ProfileContainer";
 import ProfileEditor from "../Profile/profilesider/ProfileEditor";
 import ReserPassword from "../Profile/profilesider/ReserPassword";
-import ProfileMain from "../Profile/ProfileMain";
+import Addprofile from "../Profile/profilesider/Addprofile";
+import ViewProfile from "../Profile/profilesider/ViewProfile";
+import AddSong from "../Main/AddSong";
 export let myMap = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    children:[
+    children: [
       {
-        path:"/login",
-        element:<Login/>
+        path: "/login",
+        element: <Login />,
       },
       {
-        path:"/register",
-        element:<Register/>
+        path: "/register",
+        element: <Register />,
       },
       {
-        path:"/",
-        element:<MainPage/>
+        path: "/",
+        element: <MainPage />,
       },
       {
-        path:"/profile",
-        element:<ProfileContainer/>,
-        children:[
+        path: "/addsong",
+        element: <AddSong />,
+      },
+      {
+        path: "/profile",
+        element: <ProfileContainer />,
+        children: [
           {
-            path:"/profile",
-            element:<ProfileMain/>
+            path: "/profile/addprofile",
+            element: <Addprofile />,
           },
           {
-            path:"/profile/editprofile",
-            element:<ProfileEditor/>
+            path: "/profile/viewprofile",
+            element: <ViewProfile />,
           },
           {
-            path:"/profile/password_reset",
-            element:<ReserPassword/>
-          }
-        ]
-      }
-    ]
+            path: "/profile/editprofile",
+            element: <ProfileEditor />,
+          },
+          {
+            path: "/profile/password_reset",
+            element: <ReserPassword />,
+          },
+        ],
+      },
+    ],
   },
-
 ]);

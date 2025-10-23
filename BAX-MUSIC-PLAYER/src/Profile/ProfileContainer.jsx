@@ -1,15 +1,19 @@
-import React from 'react'
-import ProfileSide from './ProfileSide'
-import ProfileMain from './ProfileMain'
-import { Outlet } from 'react-router'
+import React, { useContext } from "react";
+import { Outlet, useNavigate } from "react-router";
+import { UserContext } from "../Context/Authcontext";
+import toast from "react-hot-toast";
 
 const ProfileContainer = () => {
-  return (
-    <div className='flex'>
-        <ProfileSide/>
-        <Outlet/>
-    </div>
-  )
-}
+  let userDetails = useContext(UserContext);
+  console.log(userDetails);
+  function authuser() {
+    return (
+      <div className="flex">
+        <Outlet />
+      </div>
+    );
+  }
+  return <>{userDetails && authuser()}</>;
+};
 
-export default ProfileContainer
+export default ProfileContainer;

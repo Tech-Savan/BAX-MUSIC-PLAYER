@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router";
-import { FaEyeSlash } from "react-icons/fa";
+import { FaEyeSlash, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { _Auth } from "../../../Backend/Firebase";
@@ -22,7 +22,6 @@ const Register = () => {
   let { username, useremail, userpassword, userconfirmpassword } = data;
   function handleChange(e) {
     setData({ ...data, [e.target.id]: e.target.value });
-    
   }
   async function handleSubmit(e) {
     e.preventDefault();
@@ -38,117 +37,128 @@ const Register = () => {
           <div>
             <strong>Registered Successfully!</strong>
             <p>Please verify from mail(Check spam also)</p>
-            </div>
-            
-        )
-        await updateProfile(userData.user,{
-          displayName:data.username,
-          photoURL:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-        })
+          </div>
+        );
+        await updateProfile(userData.user, {
+          displayName: data.username,
+          photoURL:
+            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+        });
         navigator("/login");
       } else {
         toast.error("password not matched");
       }
     } catch (error) {
-      toast.error(error.code.replace("auth/",""));
+      toast.error(error.code.replace("auth/", ""));
     }
   }
-  return (
-    <>
-      <div className="flex justify-center w-[100vw] h-[calc(100vh-80px)]">
-        <section className="w-[50%] h-[100%] hidden lg:block bg-red-500"></section>
-        <section className="flex flex-col items-center w-full lg:w-[50%] p-8 ">
-          <main>
-            <form
-              className="flex flex-col gap-3 pt-8 pl-8 pr-8 pb-6 bg-white shadow-2xl"
-              onSubmit={handleSubmit}
+return (
+  <div className="flex">
+    <section className="flex justify-center pt-15 h-[89vh] w-full bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]">
+      <form className="flex flex-col gap-6 w-[80%]" onSubmit={handleSubmit}>
+        <header className="text-4xl text-center text-white font-extrabold tracking-wide">
+          LOGO
+        </header>
+
+        <main className="flex flex-col gap-5 p-6 rounded-2xl shadow-xl
+          bg-gradient-to-br from-[#1e293b] via-[#273548] to-[#1e293b] relative overflow-hidden border border-[#334155]">
+
+          <div className="flex flex-col">
+            <label htmlFor="username" className="text-gray-300 font-medium">Username:</label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Enter Your Username"
+              value={username}
+              onChange={handleChange}
+              className="border border-[#334155] rounded-lg h-11 p-3 bg-[#0f172a] text-gray-200
+                focus:outline-none focus:ring-2 focus:ring-teal-400
+                transition-all duration-300 hover:shadow-md hover:shadow-teal-500/20"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="useremail" className="text-gray-300 font-medium">Email-ID:</label>
+            <input
+              id="useremail"
+              type="email"
+              placeholder="Enter Your Email ID"
+              value={useremail}
+              onChange={handleChange}
+              className="border border-[#334155] rounded-lg h-11 p-3 bg-[#0f172a] text-gray-200
+                focus:outline-none focus:ring-2 focus:ring-teal-400
+                transition-all duration-300 hover:shadow-md hover:shadow-teal-500/20"
+            />
+          </div>
+
+          <div className="flex flex-col relative">
+            <label htmlFor="userpassword" className="text-gray-300 font-medium">Password:</label>
+            <input
+              id="userpassword"
+              type={eye1 ? "text" : "password"}
+              value={userpassword}
+              onChange={handleChange}
+              placeholder="Enter Your Password"
+              className="border border-[#334155] rounded-lg h-11 p-3 bg-[#0f172a] text-gray-200
+                focus:outline-none focus:ring-2 focus:ring-teal-400
+                transition-all duration-300 hover:shadow-md hover:shadow-teal-500/20"
+            />
+            <span
+              className="absolute right-3 bottom-3 text-gray-400 cursor-pointer hover:text-teal-400 transition-colors duration-300"
+              onClick={() => setEye1(!eye1)}
             >
-              <h1 className="text-3xl text-center text-pink-600 font-bold">
-                Register
-              </h1>
-              <div className="flex flex-col gap-0.5">
-                <label htmlFor="username">Username:</label>
-                <input
-                  type="text"
-                  id="username"
-                  className="w-[280px] border-2 h-[35px] p-2"
-                  value={username}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <label htmlFor="useremail">E-mail:</label>
-                <input
-                  type="email"
-                  id="useremail"
-                  className="w-[280px] border-2 h-[35px] p-2"
-                  value={useremail}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-0.5 relative">
-                <label htmlFor="userpassword">Password:</label>
-                <input
-                  type={eye1 ? "text" : "password"}
-                  id="userpassword"
-                  className="w-[280px] border-2 h-[35px] p-2"
-                  value={userpassword}
-                  onChange={handleChange}
-                  required
-                />
-                <span
-                  onClick={() => setEye1(!eye1)}
-                  className="absolute top-9 right-2"
-                >
-                  {eye1 ? (
-                    <IoEyeSharp className="text-black" />
-                  ) : (
-                    <FaEyeSlash className="text-black" />
-                  )}
-                </span>
-              </div>
-              <div className="flex flex-col gap-0.5 relative">
-                <label htmlFor="userconfirmpassword">Re-Enter Password:</label>
-                <input
-                  type={eye2 ? "text" : "password"}
-                  id="userconfirmpassword"
-                  className="w-[280px] border-2 h-[35px] p-2"
-                  value={userconfirmpassword}
-                  onChange={handleChange}
-                />
-                <span
-                  onClick={() => setEye2(!eye2)}
-                  className="absolute top-9 right-2"
-                >
-                  {eye2 ? (
-                    <IoEyeSharp className="text-black" />
-                  ) : (
-                    <FaEyeSlash className="text-black" />
-                  )}
-                </span>
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  className="bg-blue-600 hover:bg-blue-800 w-[280px] h-[35px] text-white hover:cursor-pointer "
-                >
-                  Register
-                </button>
-              </div>
-              <div className="flex justify-center gap-4">
-                <h1>Already Registered? </h1>
-                <NavLink to="/login" className="text-blue-600">
-                  Login
-                </NavLink>
-              </div>
-            </form>
-          </main>
-        </section>
-      </div>
-    </>
-  );
+              {eye1 ? <FaRegEyeSlash /> : <FaRegEye />}
+            </span>
+          </div>
+
+          <div className="flex flex-col relative">
+            <label htmlFor="userconfirmpassword" className="text-gray-300 font-medium">Confirm Password:</label>
+            <input
+              id="userconfirmpassword"
+              type={eye2 ? "text" : "password"}
+              value={userconfirmpassword}
+              onChange={handleChange}
+              placeholder="Re-enter Your Password"
+              className="border border-[#334155] rounded-lg h-11 p-3 bg-[#0f172a] text-gray-200
+                focus:outline-none focus:ring-2 focus:ring-teal-400
+                transition-all duration-300 hover:shadow-md hover:shadow-teal-500/20"
+            />
+            <span
+              className="absolute right-3 bottom-3 text-gray-400 cursor-pointer hover:text-teal-400 transition-colors duration-300"
+              onClick={() => setEye2(!eye2)}
+            >
+              {eye2 ? <FaRegEyeSlash /> : <FaRegEye />}
+            </span>
+          </div>
+
+          <input
+            type="submit"
+            value="Register"
+            className="rounded-lg bg-gradient-to-r from-teal-500 via-teal-400 to-teal-500
+              text-white font-semibold h-11 shadow-lg cursor-pointer transition-all duration-300
+              hover:scale-105 hover:shadow-teal-500/40"
+          />
+
+          <div className="text-center text-gray-300">
+            Already registered?{" "}
+            <NavLink to="/login" className="text-teal-400 hover:text-teal-300 transition-colors duration-300">
+              Login
+            </NavLink>
+          </div>
+        </main>
+      </form>
+    </section>
+
+    <section
+      className="w-full hidden lg:block bg-no-repeat bg-cover bg-center rounded-l-xl"
+      style={{
+        backgroundImage:
+          "url(https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenJ1Y3huZnZlNWJqaWE2dGhsa3JzNnk5MTR2bDRna3Nxc3J2eHBvOCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Sl7OlpTiHi9pPPZKp4/giphy.webp)"
+      }}
+    ></section>
+  </div>
+);
+
 };
 
 export default Register;

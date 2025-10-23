@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../Context/Authcontext";
 import { updateProfile } from "firebase/auth";
-import { doc, Firestore, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, Firestore, setDoc } from "firebase/firestore";
 import { _Auth, _DB } from "../../../Backend/Firebase";
 import toast from "react-hot-toast";
 const moods = [
@@ -63,30 +63,8 @@ const musicDirectors = [
   },
 ];
 
-const ProfileEditor = () => {
-  const userDetails = useContext(UserContext);
-  const [userData, setUserData] = useState(null);
-  const [genre, setGenre] = useState([]);
-  const [md, setMd] = useState([]);
-
-  useEffect(() => {
-    const userDoc = doc(_DB, "users", userDetails.uid);
-    const unsubscribe = onSnapshot(userDoc, (userinfo) => {
-      const datass = userinfo._document.data.value.mapValue.fields;
-      setUserData(datass);
-      setGenre(
-        datass?.music_genre?.arrayValue?.values?.map((i) => i.stringValue) || []
-      );
-      setMd(
-        datass?.music_directors?.arrayValue?.values?.map(
-          (i) => i.stringValue
-        ) || []
-      );
-    });
-
-    return () => unsubscribe();
-  }, [userDetails.uid]);
-  let names = userData?.firstname?.stringValue;
+const Addprofile = () => {
+  let userDetails = useContext(UserContext);
   let [photo, setPhoto] = useState(null);
   let [data, setData] = useState({
     firstname: "",
@@ -96,31 +74,12 @@ const ProfileEditor = () => {
     age: "",
     language: "",
     phoneno: "",
-    usertype: "",
+    usertype: "user",
   });
-
   const [selectedMoods, setSelectedMoods] = useState([]);
   const [selectedDirectors, setSelectedDirectors] = useState([]);
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-  useEffect(() => {
-    if (userData?.firstname?.stringValue) {
-      setData((prev) => ({
-        ...prev,
-        firstname: userData?.firstname?.stringValue,
-        lastname: userData?.lastname?.stringValue,
-        dob: userData?.dob?.stringValue,
-        gender: userData?.gender?.stringValue,
-        age: userData?.age?.stringValue,
-        language: userData?.language?.stringValue,
-        phoneno: userData?.phoneno?.stringValue,
-        usertype: userData?.usertype?.stringValue,
-      }));
-      setSelectedMoods(genre);
-      setSelectedDirectors(md);
-    }
-    console.log(genre, md);
-  }, [userData?.firstname?.stringValue]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -184,7 +143,7 @@ const ProfileEditor = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const toastermessage = toast.loading("Editing profile, please wait");
+    const toastermessage = toast.loading("Adding profile, please wait");
     if (photo) {
       const formData = new FormData();
       formData.append("file", photo);
@@ -211,8 +170,9 @@ const ProfileEditor = () => {
       data = { ...data, music_directors: selectedDirectors };
       await setDoc(doc(_DB, "users", userDetails.uid), data);
       toast.dismiss(toastermessage);
-      toast.success("Profile successfully edited");
+      toast.success("Profile successfully Added");
       console.log("User data saved successfully!");
+      window.location.assign("/");
     } catch (error) {
       console.error("Firestore error:", error);
     }
@@ -220,13 +180,14 @@ const ProfileEditor = () => {
   return (
     <>
       {" "}
+      <section className=" w-full h-[calc(100vh-18px)] static bg-red-500 hidden lg:block bg-[url(https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenJ1Y3huZnZlNWJqaWE2dGhsa3JzNnk5MTR2bDRna3Nxc3J2eHBvOCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Sl7OlpTiHi9pPPZKp4/giphy.webp)] bg-no-repeat bg-cover bg-center"></section>
       <form
         className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300 p-6"
         onSubmit={handleSubmit}
       >
         <section className="w-full max-w-2xl bg-white shadow-2xl rounded-lg p-8">
           <header className="text-3xl font-extrabold text-center text-gray-800 mb-8">
-            Edit Profile
+            Add Your Details
           </header>
 
           <div className="flex flex-col gap-5">
@@ -242,8 +203,8 @@ const ProfileEditor = () => {
                   type="firstname"
                   id="firstname"
                   value={data.firstname}
-                  placeholder="Enter your first name"
                   onChange={handleChange}
+                  placeholder="Enter your first name"
                   className="rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-pink-400 focus:outline-none"
                 />
               </div>
@@ -476,9 +437,8 @@ const ProfileEditor = () => {
           </div>
         </section>
       </form>
-      <section className=" w-full h-[calc(100vh-18px)] bg-red-500 hidden lg:block bg-[url(https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenJ1Y3huZnZlNWJqaWE2dGhsa3JzNnk5MTR2bDRna3Nxc3J2eHBvOCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Sl7OlpTiHi9pPPZKp4/giphy.webp)] bg-no-repeat bg-cover bg-center"></section>
     </>
   );
 };
 
-export default ProfileEditor;
+export default Addprofile;
